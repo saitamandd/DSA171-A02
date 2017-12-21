@@ -1,0 +1,71 @@
+{
+      "editor.formatOnPaste": true,
+      "editor.insertSpaces": true,
+      "editor.tabSize": 6,
+
+      "files.associations": {
+            "*.tcc": "cpp",
+            "cctype": "cpp",
+            "clocale": "cpp",
+            "cmath": "cpp",
+            "cstdint": "cpp",
+            "cstdio": "cpp",
+            "cstdlib": "cpp",
+            "ctime": "cpp",
+            "cwchar": "cpp",
+            "cwctype": "cpp",
+            "exception": "cpp",
+            "initializer_list": "cpp",
+            "iosfwd": "cpp",
+            "iostream": "cpp",
+            "istream": "cpp",
+            "limits": "cpp",
+            "new": "cpp",
+            "ostream": "cpp",
+            "stdexcept": "cpp",
+            "streambuf": "cpp",
+            "string": "cpp",
+            "system_error": "cpp",
+            "type_traits": "cpp",
+            "typeinfo": "cpp"
+      },
+
+      "files.exclude": {
+            "include/googletest": true,
+            "include/spdlog": true,
+            "build/CMakeFiles": true
+      },
+
+      // intellisense engine is not properly working
+      "C_Cpp.errorSquiggles": "Disabled",
+
+      // todo highlight
+      "todohighlight.include": ["**/*.cpp", "**/*.c"],
+      "todohighlight.keywords": [{
+                  "text": "BUGME:",
+                  "color": "green",
+                  "backgroundColor": "yellow",
+                  "overviewRulerColor": "grey"
+            },
+            {
+                  "text": "NEW:",
+                  "color": "white",
+                  "backgroundColor": "black"
+            },
+            {
+                  "text": "TODO:",
+                  "color": "red",
+                  "border": "1px solid red",
+                  "borderRadius": "2px",
+                  "backgroundColor": "rgba(0,0,0,.2)"
+            },
+            {
+                  "text": "MORETEST:",
+                  "color": "purple",
+                  "backgroundColor": "rgba(16,100,60,.2)"
+            }
+      ],
+      "editor.detectIndentation": false,
+      "editor.formatOnSave": true,
+      "C_Cpp.clang_format_path": "clang-format"
+}

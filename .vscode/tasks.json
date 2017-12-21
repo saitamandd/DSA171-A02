@@ -1,0 +1,245 @@
+{
+      // See https://go.microsoft.com/fwlink/?LinkId=733558
+      // for the documentation about the tasks.json format
+      "version": "2.0.0",
+      "type": "shell",
+      "options": {
+            "cwd": "${workspaceRoot}/build"
+      },
+      "presentation": {
+            "echo": true,
+            "reveal": "always",
+            "focus": false,
+            "panel": "shared"
+      },
+      "echoCommand": false,
+      "tasks": [{
+                  "group": {
+                        "kind": "build",
+                        "isDefault": true
+                  },
+                  "label": "build",
+                  "windows": {
+                        "command": "mingw32-make"
+                  },
+                  "linux": {
+                        "command": "make"
+                  },
+                  "problemMatcher": {
+                        "owner": "cpp",
+                        "fileLocation": "absolute",
+                        "pattern": {
+                              "regexp": "(.*.cpp):(\\d+):(\\d+):\\s+(error|warning):\\s+(.*)",
+                              "file": 1,
+                              "line": 2,
+                              "column": 3,
+                              "severity": 4,
+                              "message": 5,
+                              "loop": true
+                        }
+                  }
+            },
+            {
+                  "label": "build_to_file",
+                  "windows": {
+                        "command": "mingw32-make"
+                  },
+                  "linux": {
+                        "command": "make"
+                  },
+                  "args": [
+                        ">",
+                        "\"Build Log.txt\"",
+                        "2>&1"
+                  ]
+            },
+            {
+                  "label": "clean",
+                  "windows": {
+                        "command": "mingw32-make"
+                  },
+                  "linux": {
+                        "command": "make"
+                  },
+                  "args": [
+                        "clean"
+                  ]
+            },
+            {
+                  "label": "TEST_DEBUG",
+                  "command": "cmake",
+                  "windows": {
+                        "args": [
+                              "..",
+                              "-G",
+                              "\"MinGW Makefiles\"",
+                              "-DCMAKE_BUILD_TYPE=Debug",
+                              "-DTEST=ON",
+                              "-DUSEBOOST=OFF"
+                        ]
+                  },
+                  "linux": {
+                        "args": [
+                              "..",
+                              "-DCMAKE_BUILD_TYPE=Debug",
+                              "-DTEST=ON",
+                              "-DUSEBOOST=OFF"
+                        ]
+                  }
+            },
+            {
+                  "label": "TEST_RELEASE",
+                  "command": "cmake",
+                  "windows": {
+                        "args": [
+                              "..",
+                              "-G",
+                              "\"MinGW Makefiles\"",
+                              "-DCMAKE_BUILD_TYPE=Release",
+                              "-DTEST=ON",
+                              "-DUSEBOOST=OFF"
+                        ]
+                  },
+                  "linux": {
+                        "args": [
+                              "..",
+                              "-DCMAKE_BUILD_TYPE=Release",
+                              "-DTEST=ON",
+                              "-DUSEBOOST=OFF"
+                        ]
+                  }
+            },
+            {
+                  "label": "NORMAL_DEBUG",
+                  "command": "cmake",
+                  "windows": {
+                        "args": [
+                              "..",
+                              "-G",
+                              "\"MinGW Makefiles\"",
+                              "-DCMAKE_BUILD_TYPE=Debug",
+                              "-DTEST=OFF",
+                              "-DUSEBOOST=OFF"
+                        ]
+                  },
+                  "linux": {
+                        "args": [
+                              "..",
+                              "-DCMAKE_BUILD_TYPE=Debug",
+                              "-DTEST=OFF",
+                              "-DUSEBOOST=OFF"
+                        ]
+                  }
+            },
+            {
+                  "label": "NORMAL_RELEASE",
+                  "command": "cmake",
+                  "windows": {
+                        "args": [
+                              "..",
+                              "-G",
+                              "\"MinGW Makefiles\"",
+                              "-DCMAKE_BUILD_TYPE=Release",
+                              "-DTEST=OFF",
+                              "-DUSEBOOST=OFF"
+                        ]
+                  },
+                  "linux": {
+                        "args": [
+                              "..",
+                              "-DCMAKE_BUILD_TYPE=Release",
+                              "-DTEST=OFF",
+                              "-DUSEBOOST=OFF"
+                        ]
+                  }
+            },
+            {
+                  "label": "TEST_DEBUG_BOOST",
+                  "command": "cmake",
+                  "windows": {
+                        "args": [
+                              "..",
+                              "-G",
+                              "\"MinGW Makefiles\"",
+                              "-DCMAKE_BUILD_TYPE=Debug",
+                              "-DTEST=ON",
+                              "-DUSEBOOST=ON"
+                        ]
+                  },
+                  "linux": {
+                        "args": [
+                              "..",
+                              "-DCMAKE_BUILD_TYPE=Debug",
+                              "-DTEST=ON",
+                              "-DUSEBOOST=ON"
+                        ]
+                  }
+            },
+            {
+                  "label": "TEST_RELEASE_BOOST",
+                  "command": "cmake",
+                  "windows": {
+                        "args": [
+                              "..",
+                              "-G",
+                              "\"MinGW Makefiles\"",
+                              "-DCMAKE_BUILD_TYPE=Release",
+                              "-DTEST=ON",
+                              "-DUSEBOOST=OFF"
+                        ]
+                  },
+                  "linux": {
+                        "args": [
+                              "..",
+                              "-DCMAKE_BUILD_TYPE=Release",
+                              "-DTEST=ON",
+                              "-DUSEBOOST=OFF"
+                        ]
+                  }
+            },
+            {
+                  "label": "NORMAL_DEBUG_BOOST",
+                  "command": "cmake",
+                  "windows": {
+                        "args": [
+                              "..",
+                              "-G",
+                              "\"MinGW Makefiles\"",
+                              "-DCMAKE_BUILD_TYPE=Debug",
+                              "-DTEST=OFF",
+                              "-DUSEBOOST=ON"
+                        ]
+                  },
+                  "linux": {
+                        "args": [
+                              "..",
+                              "-DCMAKE_BUILD_TYPE=Debug",
+                              "-DTEST=OFF",
+                              "-DUSEBOOST=ON"
+                        ]
+                  }
+            },
+            {
+                  "label": "NORMAL_RELEASE_BOOST",
+                  "command": "cmake",
+                  "windows": {
+                        "args": [
+                              "..",
+                              "-G",
+                              "\"MinGW Makefiles\"",
+                              "-DCMAKE_BUILD_TYPE=Release",
+                              "-DTEST=OFF",
+                              "-DUSEBOOST=ON"
+                        ]
+                  },
+                  "linux": {
+                        "args": [
+                              "..",
+                              "-DCMAKE_BUILD_TYPE=Release",
+                              "-DTEST=OFF",
+                              "-DUSEBOOST=ON"
+                        ]
+                  }
+            }
+      ]
+}

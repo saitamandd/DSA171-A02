@@ -1,0 +1,73 @@
+{
+      "version": "0.2.0",
+      "configurations": [{
+                  "name": "launch",
+                  "type": "cppdbg",
+                  "request": "launch",
+                  "preLaunchTask": "build",
+                  "args": [
+                        "request.txt",
+                        "data.csv"
+                  ],
+                  "stopAtEntry": false,
+                  "cwd": "${workspaceRoot}",
+                  "environment": [],
+                  "externalConsole": true,
+                  "linux": {
+                        "program": "${workspaceRoot}/bin/dsa171a2",
+                        "MIMode": "gdb",
+                        "setupCommands": [{
+                              "description": "Enable pretty-printing for gdb",
+                              "text": "-enable-pretty-printing",
+                              "ignoreFailures": true
+                        }]
+                  },
+                  "osx": {
+                        "MIMode": "lldb"
+                  },
+                  "windows": {
+                        "program": "${workspaceRoot}/build/dsa171a2.exe",
+                        "MIMode": "gdb",
+                        "miDebuggerPath": "C:\\Program Files (x86)\\mingw-w64\\i686-7.1.0-posix-dwarf-rt_v5-rev0\\mingw32\\bin\\gdb.exe",
+                        "setupCommands": [{
+                              "description": "Enable pretty-printing for gdb",
+                              "text": "-enable-pretty-printing",
+                              "ignoreFailures": true
+                        }]
+                  }
+            },
+            {
+                  "name": "test",
+                  "type": "cppdbg",
+                  "request": "launch",
+                  "args": [],
+                  "stopAtEntry": false,
+                  "cwd": "${workspaceRoot}/resource",
+                  "environment": [],
+                  "externalConsole": true,
+                  "preLaunchTask": "build",
+                  "linux": {
+                        "program": "${workspaceRoot}/bin/dsa171a2-test",
+                        "MIMode": "gdb",
+                        "setupCommands": [{
+                              "description": "Enable pretty-printing for gdb",
+                              "text": "-enable-pretty-printing",
+                              "ignoreFailures": true
+                        }]
+                  },
+                  "osx": {
+                        "MIMode": "lldb"
+                  },
+                  "windows": {
+                        "program": "${workspaceRoot}/bin/dsa171a2-test.exe",
+                        "MIMode": "gdb",
+                        "miDebuggerPath": "C:\\Program Files (x86)\\mingw-w64\\i686-7.1.0-posix-dwarf-rt_v5-rev0\\mingw32\\bin\\gdb.exe",
+                        "setupCommands": [{
+                              "description": "Enable pretty-printing for gdb",
+                              "text": "-enable-pretty-printing",
+                              "ignoreFailures": true
+                        }]
+                  }
+            }
+      ]
+}

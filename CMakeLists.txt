@@ -1,6 +1,8 @@
 cmake_minimum_required(VERSION 2.8)
 project(dsa171a2)
 
+set(PUBLIC "-static -static-libgcc -static-libstdc++")
+
 set(CXX_DEFINES "-DAVL_USE_HEIGHT -DUSE_CUSTOME_COMPARE_OPS -DUSE_HASH_ID")
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11")
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${CXX_DEFINES}")
