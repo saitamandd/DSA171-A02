@@ -17,26 +17,32 @@
 
 using namespace std;
 
+class DSAException
+{
+      int _error;
+      string _text;
 
-class DSAException {
-    int     _error;
-    string  _text;
-public:
+    public:
+      DSAException() : _error(0), _text("Success") {}
+      DSAException(int err) : _error(err), _text("Unknown Error") {}
+      DSAException(int err, const char *text) : _error(err), _text(text) {}
 
-    DSAException() : _error(0), _text("Success") {}
-    DSAException(int err) : _error(err), _text("Unknown Error") {}
-    DSAException(int err, const char* text) : _error(err), _text(text) {}
-
-    int getError() { return _error; }
-    string& getErrorText() { return _text; }
+      int getError() { return _error; }
+      string &getErrorText() { return _text; }
 };
 
+int max(int a, int b)
+{
+      return (a > b) ? a : b;
+}
+
 template <class T>
-struct L1Item {
-    T data;
-    L1Item<T> *pNext;
-    L1Item() : pNext(NULL) {}
-    L1Item(T &a) : data(a), pNext(NULL) {}
+struct L1Item
+{
+      T data;
+      L1Item<T> *pNext;
+      L1Item() : pNext(NULL) {}
+      L1Item(T &a) : data(a), pNext(NULL) {}
 };
 
 template <class T>
@@ -331,227 +337,265 @@ void L1List<T>::deleteItems(T &item)
  * This section is for AVL tree
  ************************************************************************/
 template <class T>
-struct AVLNode {
-    T           _data;
-    AVLNode<T>   *_pLeft, *_pRight;
+struct AVLNode
+{
+      T _data;
+      AVLNode<T> *_pLeft, *_pRight;
 #ifdef AVL_USE_HEIGHT
-    int         _height;
-    AVLNode(T &a) : _data(a), _pLeft(NULL), _pRight(NULL), _height(1) {}
+      int _height;
+      AVLNode(T &a) : _data(a), _pLeft(NULL), _pRight(NULL), _height(1) {}
 #else
-    int         _bFactor;
-    AVLNode(T &a) : _data(a), _pLeft(NULL), _pRight(NULL), _bFactor(0) {}
+      int _bFactor;
+      AVLNode(T &a) : _data(a), _pLeft(NULL), _pRight(NULL), _bFactor(0) {}
 #endif
 
-    int height(AVLNode<T> *n){
-            if(n == NULL) return 0;
-        return _height;
-    }
+      int height(AVLNode<T> *n)
+      {
+            if (n == NULL)
+                  return 0;
+            return _height;
+      }
 };
-
-int max(int a, int b)
-{
-    return (a > b)? a : b;
-}
-
 
 template <class T>
-class AVLTree {
-    AVLNode<T> *_pRoot;
-public:
-    AVLTree() : _pRoot(NULL) {}
-    ~AVLTree() { destroy(_pRoot); }
+class AVLTree
+{
+      AVLNode<T> *_pRoot;
 
-    bool find(T& key, T* &ret) { return find(_pRoot, key, ret); }
-    bool insert(T& key) { return insert(_pRoot, key); }
-    bool remove(T& key) { return remove(_pRoot, key); }
-    void traverseNLR(void (*op)(T&)) { traverseNLR(_pRoot, op); }
-    void traverseLNR(void (*op)(T&)) { traverseLNR(_pRoot, op); }
-    void traverseLRN(void (*op)(T&)) { traverseLRN(_pRoot, op); }
+    public:
+      AVLTree() : _pRoot(NULL) {}
+      ~AVLTree() { destroy(_pRoot); }
 
-protected:
-    void destroy(AVLNode<T>* &pR);
-    bool find(AVLNode<T> *pR, T& key, T* &ret);
-    bool insert(AVLNode<T>* &pR, T& a);
-    bool remove(AVLNode<T>* &pR, T& a);
-    void traverseNLR(AVLNode<T> *pR, void (*op)(T&));
-    void traverseLNR(AVLNode<T> *pR, void (*op)(T&));
-    void traverseLRN(AVLNode<T> *pR, void (*op)(T&));
+      bool find(T &key, T *&ret) { return find(_pRoot, key, ret); }
+      bool insert(T &key) { return insert(_pRoot, key); }
+      bool remove(T &key) { return remove(_pRoot, key); }
+      void traverseNLR(void (*op)(T &)) { traverseNLR(_pRoot, op); }
+      void traverseLNR(void (*op)(T &)) { traverseLNR(_pRoot, op); }
+      void traverseLRN(void (*op)(T &)) { traverseLRN(_pRoot, op); }
 
-    void rotLeft(AVLNode<T>* &pR);
-    void rotRight(AVLNode<T>* &pR);
-    void rotLR(AVLNode<T>* &pR);
-    void rotRL(AVLNode<T>* &pR);
+    protected:
+      void destroy(AVLNode<T> *&pR);
+      bool find(AVLNode<T> *pR, T &key, T *&ret);
+      bool insert(AVLNode<T> *&pR, T &a);
+      bool remove(AVLNode<T> *&pR, T &a);
+      void traverseNLR(AVLNode<T> *pR, void (*op)(T &));
+      void traverseLNR(AVLNode<T> *pR, void (*op)(T &));
+      void traverseLRN(AVLNode<T> *pR, void (*op)(T &));
 
-    bool balanceLeft(AVLNode<T>* &pR);
-    bool balanceRight(AVLNode<T>* &pR);
+      void rotLeft(AVLNode<T> *&pR);
+      void rotRight(AVLNode<T> *&pR);
+      void rotLR(AVLNode<T> *&pR);
+      void rotRL(AVLNode<T> *&pR);
 
-    void printAVL(AVLNode<T> *&pR);
+      bool balanceLeft(AVLNode<T> *&pR);
+      bool balanceRight(AVLNode<T> *&pR);
+
+      void printAVL(AVLNode<T> *&pR);
 };
 
-    template<class T>
-    void AVLNode<T>:: destroy(AVLNode<T>* &pR){
-        if(pR!=NULL){
+template <class T>
+void AVLTree<T>::destroy(AVLNode<T> *&pR)
+{
+      if (pR == NULL)
+            return;
+
+      if (pR->_pLeft == NULL && pR->_pRight == NULL)
+      {
+            delete pR;
+            pR = NULL;
+      }
+      else
+      {
             destroy(pR->_pLeft);
             destroy(pR->_pRight);
-        }
-    }
+            delete pR;
+            pR = NULL;
+      }
+}
 
-    template<class T>
-    bool AVLNode<T>:: find(AVLNode<T> *pR, T& key, T* &ret){
-          if(!pR) return;
+template <class T>
+bool AVLTree<T>::find(AVLNode<T> *pR, T &key, T *&ret)
+{
+      if (!pR)
+            return false;
 
-          if(pR->_data == key){
-                ret = &pR->_data;
-                return true;
-          } 
+      if (pR->_data == key)
+      {
+            ret = &pR->_data;
+            return true;
+      }
 
-          if(pR->_data < key)
-                return find(pR->_pRight, key, ret);
-          else
-                return find(pR->_pLeft, key, ret);
-    }
+      if (pR->_data < key)
+            return find(pR->_pRight, key, ret);
+      else
+            return find(pR->_pLeft, key, ret);
+}
 
-    template<class T>
-    bool AVLNode<T>:: insert(AVLNode<T>* &pR, T& a){
-        if(pR == NULL){
+template <class T>
+bool AVLTree<T>::insert(AVLNode<T> *&pR, T &a)
+{
+      if (pR == NULL)
+      {
             pR = new AVLNode<T>(a);
             return true;
-        }
+      }
 
-        if(a < pR->_data)
+      if (a < pR->_data)
             insert(pR->_pLeft, a);
-        else {
-            if(a > pR->_data)
-                insert(pR->_pRight,a);
-        }
+      else
+      {
+            if (a > pR->_data)
+                  insert(pR->_pRight, a);
+      }
 
-        pR->_height = 1 + max(height(pR->_pLeft), height(pR->_pRight));
+      pR->_height = 1 + max(height(pR->_pLeft), height(pR->_pRight));
 
-        int bal = height(pR->_pLeft) - height(pR->_pRight);
+      int bal = height(pR->_pLeft) - height(pR->_pRight);
 
-        if(bal > 1)
+      if (bal > 1)
             balanceLeft(pR);
-        else if(bal < -1)
+      else if (bal < -1)
             balanceRight(pR);
-        else return  false;
-    }
+      else
+            return false;
+}
 
-    template<class T>
-    bool AVLNode<T>:: remove(AVLNode<T>* &pR, T& a){}
+template <class T>
+bool AVLTree<T>::remove(AVLNode<T> *&pR, T &a) {}
 
-    template<class T>
-    void AVLNode<T>:: traverseNLR(AVLNode<T> *pR, void (*op)(T&)){
-          if(!pR) return;
+template <class T>
+void AVLTree<T>::traverseNLR(AVLNode<T> *pR, void (*op)(T &))
+{
+      if (!pR)
+            return;
 
-          op(pR->_data);
-          traverseNLR(pR->_pLeft,op);
-          traverseNLR(pR->_pRight,op);
-    }
+      op(pR->_data);
+      traverseNLR(pR->_pLeft, op);
+      traverseNLR(pR->_pRight, op);
+}
 
-    template<class T>
-    void AVLNode<T>:: traverseLNR(AVLNode<T> *pR, void (*op)(T&)){
-          if(!pR) return;
+template <class T>
+void AVLTree<T>::traverseLNR(AVLNode<T> *pR, void (*op)(T &))
+{
+      if (!pR)
+            return;
 
-          traverseLNR(pR->_pLeft,op);
-          op(pR ->_data);
-          traverseLNR(pR->_pRight, op);
+      traverseLNR(pR->_pLeft, op);
+      op(pR->_data);
+      traverseLNR(pR->_pRight, op);
+}
 
-    template<class T>
-    void AVLNode<T>:: traverseLRN(AVLNode<T> *pR, void (*op)(T&)){
-          if(!pR) return;
+template <class T>
+void AVLTree<T>::traverseLRN(AVLNode<T> *pR, void (*op)(T &))
+{
+      if (!pR)
+            return;
 
-          traverseLRN(pR->_pLeft,op);
-          traverseLRN(pR->_pRight,op);
-          op(pR->_data);
-    }
+      traverseLRN(pR->_pLeft, op);
+      traverseLRN(pR->_pRight, op);
+      op(pR->_data);
+}
 
-    template<class T>
-    void AVLNode<T>:: rotLeft(AVLNode<T>* &pR){
-        AVLNode<T> *temp = pR->_pRight;
-        AVLNode<T> *rot = temp->_pLeft;
+template <class T>
+void AVLTree<T>::rotLeft(AVLNode<T> *&pR)
+{
+      AVLNode<T> *temp = pR->_pRight;
+      AVLNode<T> *rot = temp->_pLeft;
 
-        temp->_pLeft = pR;
-        pR->_pRight = rot;
+      temp->_pLeft = pR;
+      pR->_pRight = rot;
 
-        pR->_height = max(height(pR->_pLeft),height(pR->_pRight)) + 1;
-        temp->_height = max(height(pR->_pLeft),height(pR->_pRight)) +1;
-        temp = NULL;
-    }
+      pR->_height = max(height(pR->_pLeft), height(pR->_pRight)) + 1;
+      temp->_height = max(height(pR->_pLeft), height(pR->_pRight)) + 1;
+      temp = NULL;
+}
 
-    template<class T>
-    void AVLNode<T>:: rotRight(AVLNode<T>* &pR){
-        AVLNode<T> * temp = pR->_pLeft;
-        AVLNode<T> *rot = temp->_pRight;
+template <class T>
+void AVLTree<T>::rotRight(AVLNode<T> *&pR)
+{
+      AVLNode<T> *temp = pR->_pLeft;
+      AVLNode<T> *rot = temp->_pRight;
 
-        temp->_pRight = pR;
-        pR->_pLeft = rot;
+      temp->_pRight = pR;
+      pR->_pLeft = rot;
 
-        pR->_height = max(height(pR->_pLeft),height(pR->_pRight)) + 1;
-        temp->_height = max(height(pR->_pLeft),height(pR->_pRight)) +1;
-        temp = NULL;
-    }
+      pR->_height = max(height(pR->_pLeft), height(pR->_pRight)) + 1;
+      temp->_height = max(height(pR->_pLeft), height(pR->_pRight)) + 1;
+      temp = NULL;
+}
 
-    template<class T>
-    void AVLNode<T>:: rotLR(AVLNode<T>* &pR){
-        rotLeft(pR->_pLeft);
-        rotRigt(pR);
-    }
+template <class T>
+void AVLTree<T>::rotLR(AVLNode<T> *&pR)
+{
+      rotLeft(pR->_pLeft);
+      rotRigt(pR);
+}
 
-    template<class T>
-    void AVLNode<T>:: rotRL(AVLNode<T>* &pR){
-        rotRight(pR->_pRight);
-        rotLeft(pR);
-    }
+template <class T>
+void AVLTree<T>::rotRL(AVLNode<T> *&pR)
+{
+      rotRight(pR->_pRight);
+      rotLeft(pR);
+}
 
+template <class T>
+bool AVLTree<T>::balanceLeft(AVLNode<T> *&pR)
+{
 
-    template<class T>
-    bool AVLNode<T>:: balanceLeft(AVLNode<T>* &pR){
+      //height LR
+      int lrh = pR->_pLeft->_pRight ? pR->_pLeft->_pRight->_height : 0;
 
-        //height LR
-        int lrh = pR->_pLeft->_pRight ? pR->_pLeft->_pRight->_height : 0;
+      //height LL
+      int llh = pR->_pLeft->_pLeft ? pR->_pLeft->_pLeft->_height : 0;
 
-        //height LL
-        int llh = pR->_pLeft->_pLeft ? pR->_pLeft->_pLeft->_height : 0;
+      int bal = lrh - llh;
 
-        int bal = lrh-llh;
-
-        if(bal >= 1){
+      if (bal >= 1)
+      {
             rotLR(pR);
             return true;
-        }
-        else if(bal <= -1){
+      }
+      else if (bal <= -1)
+      {
             rotRight(pR);
             return true;
-        }
-        else return false;
-    }
+      }
+      else
+            return false;
+}
 
-    template<class T>
-    bool AVLNode<T>:: balanceRight(AVLNode<T>* &pR){
-        int rrh = pR->_pRight->_pRight ? pR->_pRight->_pRight->_height : 0;
+template <class T>
+bool AVLTree<T>::balanceRight(AVLNode<T> *&pR)
+{
+      int rrh = pR->_pRight->_pRight ? pR->_pRight->_pRight->_height : 0;
 
-        //height LL
-        int rlh = pR->_pRight->_pLeft ? pR->_pRight->_pLeft->_height : 0;
+      //height LL
+      int rlh = pR->_pRight->_pLeft ? pR->_pRight->_pLeft->_height : 0;
 
-        int bal = rrh-rlh;
+      int bal = rrh - rlh;
 
-        if(bal >= 1){
+      if (bal >= 1)
+      {
             rotLeft(pR);
             return true;
-        }
-        else if(bal <= -1){
+      }
+      else if (bal <= -1)
+      {
             rotRL(pR);
             return true;
-        }
-        else return false;
-    }
+      }
+      else
+            return false;
+}
 
-    template<class T>
-    void AVLNode<T>:: printAVL(AVLNode<T>* &pR){
-          if(!pR) return;
+template <class T>
+void AVLTree<T>::printAVL(AVLNode<T> *&pR)
+{
+      if (!pR)
+            return;
 
-          cout << pR << "   ";
-          printAVL(pR->_pLeft);
-          printAVL(pR->_pRight);
-    }
+      cout << pR << "   ";
+      printAVL(pR->_pLeft);
+      printAVL(pR->_pRight);
+}
 #endif //A02_DSALIB_H

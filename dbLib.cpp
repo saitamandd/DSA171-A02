@@ -22,69 +22,127 @@
 
 using namespace std;
 
-void    strPrintTime(char* des, time_t& t) {
-    tm *pTime = gmtime(&t);
-    strftime(des, 26, "%Y-%m-%d %H:%M:%S", pTime);
+void strPrintTime(char *des, time_t &t)
+{
+      tm *pTime = gmtime(&t);
+      strftime(des, 26, "%Y-%m-%d %H:%M:%S", pTime);
 }
 
-void loadVMDB(char* fName, L1List<VM_Record> &db) {
-    ifstream inFile(fName);
+void loadVMDB(char *fName, L1List<VM_Record> &db)
+{
+      ifstream inFile(fName);
 
-    if (inFile) {
-        string line;
-        getline(inFile , line);// skip the first line
-        VM_Record record;
+      if (inFile)
+      {
+            string line;
+            getline(inFile, line); // skip the first line
+            VM_Record record;
 
-        db.insertHead(record);/// add dummy object
+            db.insertHead(record); /// add dummy object
 
-        while (getline(inFile , line)) {
-            /// On Windows, lines on file ends with \r\n. So you have to remove \r
-            if (line[line.length() - 1] == '\r')
-                line.erase(line.length() - 1);
-            if (line.length() > 0) {
-                if (parseVMRecord((char*)line.data(), db[0]))/// parse and store data directly
-                    db.insertHead(record);/// add dummy object for next turn
+            while (getline(inFile, line))
+            {
+                  /// On Windows, lines on file ends with \r\n. So you have to remove \r
+                  if (line[line.length() - 1] == '\r')
+                        line.erase(line.length() - 1);
+                  if (line.length() > 0)
+                  {
+                        if (parseVMRecord((char *)line.data(), db[0])) /// parse and store data directly
+                              db.insertHead(record);                   /// add dummy object for next turn
+                  }
             }
-        }
-        db.removeHead();/// remove the first dummy
+            db.removeHead(); /// remove the first dummy
 
-        db.reverse();
-        inFile.close();
-    }
-    else {
-        cout << "The file is not found!";
-    }
+            db.reverse();
+            inFile.close();
+      }
+      else
+      {
+            cout << "The file is not found!";
+      }
 }
 
-bool parseVMRecord(char *pBuf, VM_Record &bInfo) {
-    // TODO: write code to parse a record from given line
+bool parseVMRecord(char *pBuf, VM_Record &bInfo)
+{
+      // TODO: write code to parse a record from given line
+
+           int pre;
+      int ngay;
+      int thang;
+      int nam;
+      int gio;
+      int phut;
+      int giay;
+
+      sscanf(
+          pBuf,
+          "%d,%d/%d/%d %d:%d:%d,%20[a-zA-Z0-9],%lF,%lF",
+          &pre,
+          &thang,
+          &ngay,
+          &nam,
+          &gio,
+          &phut,
+          &giay,
+          bInfo.id,
+          &bInfo.longitude,
+          &bInfo.latitude);
+
+      int dodai = strlen(bInfo.id);
+
+      if (dodai < 4)
+      {
+            memmove(bInfo.id + 4 - dodai, bInfo.id, 4);
+            for (; dodai < 4; ++dodai)
+            {
+                  bInfo.id[4 - dodai - 1] = '0';
+            }
+      }
+
+      struct tm thisTime;
+      thisTime.tm_year = nam - 1900;
+      thisTime.tm_mon = thang - 1;
+      thisTime.tm_mday = ngay;
+      thisTime.tm_hour = gio;
+      thisTime.tm_min = phut;
+      thisTime.tm_sec = giay;
+      thisTime.tm_isdst = -1;
+
+      bInfo.timestamp = mktime(&thisTime);
+
+      return true;
 }
 
-void process(L1List<VM_Request>& requestList, L1List<VM_Record>& rList) {
-    void*   pGData = NULL;
-    initVMGlobalData(&pGData);
+void process(L1List<VM_Request> &requestList, L1List<VM_Record> &rList)
+{
+      void *pGData = NULL;
+      initVMGlobalData(&pGData);
 
-    while (!requestList.isEmpty()) {
-        if(!processRequest(requestList[0], rList, pGData))
-            cout << requestList[0].code << " is an invalid event\n";
-        requestList.removeHead();
-    }
+      while (!requestList.isEmpty())
+      {
+            if (!processRequest(requestList[0], rList, pGData))
+                  cout << requestList[0].code << " is an invalid event\n";
+            requestList.removeHead();
+      }
 
-    releaseVMGlobalData(pGData);
+      releaseVMGlobalData(pGData);
 }
 
-void printVMRecord(VM_Record &b) {
-    printf("%s: (%0.5f, %0.5f), %s\n", b.id, b.longitude, b.latitude, ctime(&b.timestamp));
+void printVMRecord(VM_Record &b)
+{
+      printf("%s: (%0.5f, %0.5f), %s\n", b.id, b.longitude, b.latitude, ctime(&b.timestamp));
 }
 
 /// This function converts decimal degrees to radians
-inline double deg2rad(double deg) {
-    return (deg * __PI / 180);
+inline double deg2rad(double deg)
+{
+      return (deg * __PI / 180);
 }
 
 ///  This function converts radians to decimal degrees
-inline double rad2deg(double rad) {
-    return (rad * 180 / __PI);
+inline double rad2deg(double rad)
+{
+      return (rad * 180 / __PI);
 }
 
 /**
@@ -96,13 +154,14 @@ inline double rad2deg(double rad) {
  * @param lon2d Longitude of the second point in degrees
  * @return The distance between the two points in kilometers
  */
-double distanceEarth(double lat1d, double lon1d, double lat2d, double lon2d) {
-    double lat1r, lon1r, lat2r, lon2r, u, v;
-    lat1r = deg2rad(lat1d);
-    lon1r = deg2rad(lon1d);
-    lat2r = deg2rad(lat2d);
-    lon2r = deg2rad(lon2d);
-    u = sin((lat2r - lat1r)/2);
-    v = sin((lon2r - lon1r)/2);
-    return 2.0 * earthRadiusKm * asin(sqrt(u * u + cos(lat1r) * cos(lat2r) * v * v));
+double distanceEarth(double lat1d, double lon1d, double lat2d, double lon2d)
+{
+      double lat1r, lon1r, lat2r, lon2r, u, v;
+      lat1r = deg2rad(lat1d);
+      lon1r = deg2rad(lon1d);
+      lat2r = deg2rad(lat2d);
+      lon2r = deg2rad(lon2d);
+      u = sin((lat2r - lat1r) / 2);
+      v = sin((lon2r - lon1r) / 2);
+      return 2.0 * earthRadiusKm * asin(sqrt(u * u + cos(lat1r) * cos(lat2r) * v * v));
 }
