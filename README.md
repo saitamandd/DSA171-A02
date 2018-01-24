@@ -22,7 +22,7 @@ các công việc sinh viên phải làm được nêu trong các mục dưới 
 -  File `data.csv`: chứa các thông tin về vị trí của các phương tiện 
 	vận chuyển, trong đó chúng ta quan tâm 4 thông số quan trọng sau:
 	+ COLLECTED_TIME (timestamp): thời điểm mà dữ liệu được gởi về. 
-	+ TAG: ID của phương tiện. %ARMY\_ID: số hiệu của lính Mỹ.
+	+ TAG: ID của phương tiện.
 	+ LONGITUDE (long): kinh độ.
 	+ LATITUDE (lat): vĩ độ.
 - File `request.txt`: chứa các yêu cầu xử lý dữ liệu. Các yêu cầu này được 

@@ -28,7 +28,7 @@
 #define MAX_PARAM_SIZE         6
 using namespace std;
 
-typedef struct VM_Request {
+struct VM_Request {
     char        code[REQUEST_CODE_SIZE];
     double      params[MAX_PARAM_SIZE];
 
